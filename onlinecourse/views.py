@@ -2,9 +2,17 @@ from django.shortcuts import render, get_object_or_404
 from .models import Course, Question, Choice, Submission, Enrollment
 
 
-def submit(request, course_id):
+def course_details(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     questions = course.question_set.all()
+    return render(request, 'onlinecourse/course_details_bootstrap.html', {
+        'course': course,
+        'questions': questions
+    })
+
+
+def submit(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
 
     if request.method == 'POST':
         enrollment = Enrollment.objects.first()
@@ -19,8 +27,7 @@ def submit(request, course_id):
         return show_exam_result(request, submission.id)
 
     return render(request, 'onlinecourse/course_details_bootstrap.html', {
-        'course': course,
-        'questions': questions
+        'course': course
     })
 
 
